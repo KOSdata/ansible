@@ -1,0 +1,830 @@
+all:
+  children:
+    kosdata:
+      hosts:
+        kosdata-hgs-nc:
+          ansible_host: 5.22.252.151
+          ansible_user: root
+        kosdata-unifi:
+          ansible_host: 192.168.4.8
+          ansible_user: root
+        kosdata-hgs-fw:
+          ansible_host: 5.22.252.150
+          ansible_user: root
+        kosdata-hgs-web:
+          ansible_host: 5.22.252.152
+          ansible_user: root
+        kosdata-hgs-dom0:
+          ansible_host: 192.168.26.2
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q kosdata-hgs-fw nc -q0 %h
+            %p"
+        kosdata-hgs-sql:
+          ansible_host: 192.168.26.4
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q kosdata-hgs-fw nc -q0 %h
+            %p"
+        kosdata-grn-dom0:
+          ansible_host: 192.168.28.2
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 194.50.163.245 nc -q0 %h
+            %p"
+        kosdata-grn-fw:
+          ansible_host: 194.50.163.245
+          ansible_user: root
+        kosdata-mx2:
+          ansible_host: 136.144.189.113
+          ansible_user: root
+        kosdata-mx1:
+          ansible_host: 194.50.163.247
+          ansible_user: root
+        kosdata-monitor:
+          ansible_host: 149.210.227.245
+          ansible_user: root
+        kosdata-connect:
+          ansible_host: 37.97.246.182
+          ansible_user: root
+        kosdata-backup-grn:
+          ansible_host: backup-grn.kosdata.nl
+          ansible_user: root
+        kosdata-vpn-hgs:
+          ansible_host: vpn-hgs.kosdata.nl
+          ansible_user: root
+        kosdata-grn-wu:
+          ansible_host: 192.168.28.4
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 194.50.163.245 nc -q0 %h
+            %p"
+        kosdata-ydentic-fw:
+          ansible_host: tb.kosdata.nl
+          ansible_user: root
+        kosdata-ydentic-xoa:
+          ansible_host: 192.168.24.2
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q tb.kosdata.nl nc -q0 %h
+            %p"
+        kosdata-ydentic-dom0:
+          ansible_host: 192.168.24.3
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q tb.kosdata.nl nc -q0 %h
+            %p"
+    iedema:
+      hosts:
+        iedema-lin10dom0-1:
+          ansible_host: 192.168.100.72
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 5.22.252.141 nc -q0 %h
+            %p"
+        iedema-lin10dom0-2:
+          ansible_host: 192.168.100.73
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 5.22.252.141 nc -q0 %h
+            %p"
+        iedema-lin10nx1:
+          ansible_host: 192.168.100.73
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 5.22.252.141 nc -q0 %h
+            %p"
+        iedema-almelo:
+          ansible_host: 83.98.233.146
+          ansible_user: root
+        iedema-groningen:
+          ansible_host: 213.34.148.206
+          ansible_user: root
+        iedema-toren:
+          ansible_host: 5.22.252.141
+          ansible_user: root
+        iedema-appelscha:
+          ansible_host: 85.146.206.218
+          ansible_user: root
+        iedema-zwolle:
+          ansible_host: 159.100.90.126
+          ansible_user: root
+        iedema-amstelveen:
+          ansible_host: 83.167.200.254
+          ansible_user: root
+        iedema-xenserver:
+          ansible_host: 192.168.100.70
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 5.22.252.141 nc -q0 %h
+            %p"
+        iedema-snipe:
+          ansible_host: 192.168.100.80
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 5.22.252.141 nc -q0 %h
+            %p"
+        iedema-tiel:
+          ansible_host: 93.117.234.14
+          ansible_user: root
+    misc:
+      hosts:
+        alderikvos:
+          ansible_host: 31.160.71.81
+          ansible_user: root
+    vredeveld:
+      hosts:
+        vredeveld-toren-fw:
+          ansible_host: datatoren.vredeveld.eu
+          ansible_user: root
+        vredeveld-toren-lin12prx0:
+          ansible_host: 172.31.10.2
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q vredeveld-toren-fw nc -q0
+            %h %p"
+        vredeveld-toren-lin12misc1:
+          ansible_host: 172.25.10.30
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q vredeveld-toren-fw nc -q0
+            %h %p"
+        vredeveld-hoogersmilde:
+          ansible_host: 92.68.187.109
+          ansible_user: root
+        vredeveld-tak:
+          ansible_host: 77.60.227.21
+          ansible_user: root
+    wiechers:
+      hosts:
+        wiechers-nextcloud:
+          ansible_host: 192.168.40.4
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q webmail.wiecherswonen.nl
+            nc -q0 %h %p"
+        wiechers-kerio:
+          ansible_host: 192.168.40.5
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q webmail.wiecherswonen.nl
+            nc -q0 %h %p"
+        wiechers-kerio-oud:
+          ansible_host: 192.168.40.3
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q webmail.wiecherswonen.nl
+            nc -q0 %h %p"
+        wiechers-backup:
+          ansible_host: 10.0.0.200
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q webmail.wiecherswonen.nl
+            nc -q0 %h %p"
+        wiechers-dom0:
+          ansible_host: 10.0.0.201
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q webmail.wiecherswonen.nl
+            nc -q0 %h %p"
+        wiechers-alf1:
+          ansible_host: 10.0.0.203
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q webmail.wiecherswonen.nl
+            nc -q0 %h %p"
+        wiechers-fw:
+          ansible_host: webmail.wiecherswonen.nl
+          ansible_user: root
+        wiechers-ommen:
+          ansible_host: ommen.wiecherswonen.nl
+          ansible_user: root
+        wiechers-lin11web1:
+          ansible_host: 136.144.216.121
+          ansible_user: root
+    schaaphok:
+      hosts:
+        schaaphok-toren:
+          ansible_host: 5.22.252.140
+          ansible_user: root
+        schaaphok-dom0:
+          ansible_host: 192.168.100.5
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q schaaphok-toren nc -q0
+            %h %p"
+        schaaphok-assen:
+          ansible_host: 192.168.90.1
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q schaaphok-toren nc -q0
+            %h %p"
+    oosterboer:
+      hosts:
+        oosterboer-xenserver:
+          ansible_host: 192.168.55.17
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mail.oosterboer.com nc
+            -q0 %h %p"
+        oosterboer-misc:
+          ansible_host: mail.oosterboer.com
+          ansible_user: root
+        oosterboer-lin11web1:
+          ansible_host: 192.168.30.2
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mail.oosterboer.com nc
+            -q0 %h %p"
+    zoer:
+      hosts:
+        zoer-fw:
+          ansible_host: 217.100.252.210
+          ansible_user: root
+        zoer-dom0:
+          ansible_host: 192.168.64.15
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q zoer-fw nc -q0 %h %p"
+    cape:
+      hosts:
+        cape-fw:
+          ansible_host: mail.cape-holland.com
+          ansible_user: root
+        cape-fw-romhof3:
+          ansible_host: 155.137.23.38
+          ansible_user: root
+        cape-bck0:
+          ansible_host: 5.22.252.138
+          ansible_user: root
+        cape-alf1:
+          ansible_host: 172.32.10.0
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mail.cape-holland.com nc
+            -q0 %h %p"
+        cape-alf2:
+          ansible_host: 172.32.10.32
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mail.cape-holland.com nc
+            -q0 %h %p"
+        cape-alf6:
+          ansible_host: 172.32.10.32
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mail.cape-holland.com nc
+            -q0 %h %p"
+        cape-lin11db1:
+          ansible_host: 172.32.10.31
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mail.cape-holland.com nc
+            -q0 %h %p"
+        cape-lin11alm1:
+          ansible_host: 172.32.10.33
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mail.cape-holland.com nc
+            -q0 %h %p"
+        cape-lin11js1:
+          ansible_host: 172.32.10.28
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mail.cape-holland.com nc
+            -q0 %h %p"
+        cape-lin11mssql1:
+          ansible_host: 172.32.10.34
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mail.cape-holland.com nc
+            -q0 %h %p"
+        cape-lin11snip1:
+          ansible_host: 172.32.10.36
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mail.cape-holland.com nc
+            -q0 %h %p"
+        cape-lin11svn1:
+          ansible_host: 172.32.10.37
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mail.cape-holland.com nc
+            -q0 %h %p"
+        cape-lin11web1:
+          ansible_host: 172.32.10.38
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mail.cape-holland.com nc
+            -q0 %h %p"
+        cape-lin12unf1:
+          ansible_host: 172.32.10.39
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mail.cape-holland.com nc
+            -q0 %h %p"
+        cape-lin12prx1:
+          ansible_host: 172.28.10.2
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mail.cape-holland.com nc
+            -q0 %h %p"
+        cape-lin12log1:
+          ansible_host: 172.32.10.3
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mail.cape-holland.com nc
+            -q0 %h %p"
+    sterkwerk:
+      hosts:
+        sterkwerk-fw:
+          ansible_host: 213.125.144.250
+          ansible_user: root
+    ewhfts:
+      hosts:
+        ewhfts-tcb:
+          ansible_host: 159.100.65.6
+          ansible_user: root
+        ewhfts-toren-fw:
+          ansible_host: 5.22.252.146
+          ansible_user: root
+        ewhfts-dom0:
+          ansible_host: 192.168.32.3
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q ewhfts-toren-fw nc -q0
+            %h %p"
+        ewhfts-unifi:
+          ansible_host: 192.168.32.160
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q ewhfts-toren-fw nc -q0
+            %h %p"
+        ewhfts-monitor:
+          ansible_host: 192.168.32.150
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q ewhfts-toren-fw nc -q0
+            %h %p"
+        ewhfts-nextcloud:
+          ansible_host: 192.168.32.141
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q ewhfts-toren-fw nc -q0
+            %h %p"
+        ewhfts-mib:
+          ansible_host: 77.172.83.158
+          ansible_user: root
+        ewhfts-oosterwolde:
+          ansible_host: 159.100.67.226
+          ansible_user: root
+    mesken:
+      hosts:
+        mesken-fw:
+          ansible_host: mail.mesken-bv.nl
+          ansible_user: root
+        mesken-misc12:
+          ansible_host: 172.17.10.13
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mesken-fw nc -q0 %h %p"
+        mesken-dom0:
+          ansible_host: 172.16.10.8
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mesken-fw nc -q0 %h %p"
+        mesken-dom0-1:
+          ansible_host: 172.17.10.0
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mesken-fw nc -q0 %h %p"
+        mesken-xcp-ng:
+          ansible_host: 172.17.10.10
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mesken-fw nc -q0 %h %p"
+        mesken-psql:
+          ansible_host: 172.16.10.6
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mesken-fw nc -q0 %h %p"
+        mesken-gebros:
+          ansible_host: 172.18.0.1
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mesken-fw nc -q0 %h %p"
+        mesken-xoa:
+          ansible_host: 172.17.10.7
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q mesken-fw nc -q0 %h %p"
+    tts:
+      hosts:
+        tts-fw:
+          ansible_host: 89.47.182.58
+          ansible_user: root
+    bouwmijhendriks:
+      hosts:
+        bouwmijhendriks-dom0:
+          ansible_host: post.bouwmijhendriks.nl
+          ansible_user: root
+    wasse:
+      hosts:
+        wasse-dom0:
+          ansible_host: 84.28.85.175
+          ansible_user: root
+    steegklop:
+      hosts:
+        steegklop-fw:
+          ansible_host: 86.105.232.245
+          ansible_user: root
+        steegklop-dom0:
+          ansible_host: 192.168.40.16
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh  steegklop-fw nc -q0 %h %p"
+    klay:
+      hosts:
+        klay-dom0:
+          ansible_host: 217.100.155.26
+          ansible_user: root
+    kremer:
+      hosts:
+        kremer-toren-fw:
+          ansible_host: 5.22.252.154
+          ansible_user: root
+        kremer-toren-dom0:
+          ansible_host: 192.168.50.2
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 5.22.252.154 nc -q0 %h
+            %p"
+    offringa:
+      hosts:
+        offringa-vpn-dom0:
+          ansible_host: 192.168.24.20
+          ansible_user: root
+        offringa-xoa:
+          ansible_host: 213.124.85.150
+          ansible_user: root
+    moes:
+      hosts:
+        moes-dom0:
+          ansible_host: 10.10.10.11
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 84.82.166.94 nc -q0 %h
+            %p"
+        moes-fw:
+          ansible_host: 84.82.166.94
+          ansible_user: root
+    lbf:
+      hosts:
+        lbf-dom0-new:
+          ansible_host: 91.106.228.122
+          ansible_user: root
+    strijker:
+      hosts:
+        strijker-fw:
+          ansible_host: vpn.autostrijker.nl
+          ansible_user: root
+        strijker-toren:
+          ansible_host: 5.22.252.145
+          ansible_user: root
+        strijker-toren-dom0:
+          ansible_host: 192.168.64.3
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q strijker-toren nc -q0 %h
+            %p"
+        strijker-toren-xoa:
+          ansible_host: 192.168.64.4
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q strijker-toren nc -q0 %h
+            %p"
+    kks:
+      hosts:
+        kks-hgs-fw0:
+          ansible_host: kks-hgs.kks.nl
+          ansible_user: root
+        kks-hgs-san0:
+          ansible_host: 172.0.10.11
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q kks-hgs-fw0 nc -q0 %h %p"
+        kks-hgs-san1:
+          ansible_host: 172.0.10.10
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q kks-hgs-fw0 nc -q0 %h %p"
+        kks-hgs-dom0:
+          ansible_host: 172.16.10.11
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q kks-hgs-fw0 nc -q0 %h %p"
+        kks-hgs-dom0-5:
+          ansible_host: 172.16.10.16
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q kks-hgs-fw0 nc -q0 %h %p"
+        kks-hgs-dom0-6:
+          ansible_host: 172.16.10.18
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q kks-hgs-fw0 nc -q0 %h %p"
+        kks-hgs-dom0-7:
+          ansible_host: 172.17.10.5
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q wkr-fw nc -q0 %h %p"
+        kks-hgs-dom1:
+          ansible_host: 172.17.10.11
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q kks-hgs-fw0 nc -q0 %h %p"
+        kks-hgs-lin12srv1:
+          ansible_host: 172.16.10.5
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q kks-hgs-fw0 nc -q0 %h %p"
+        kks-hgs-domino1:
+          ansible_host: 172.16.10.1
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q kks-hgs-fw0 nc -q0 %h %p"
+        kks-hgs-misc1:
+          ansible_host: 172.16.10.3
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q kks-hgs-fw0 nc -q0 %h %p"
+        kks-grn-fw1:
+          ansible_host: 172.19.0.1
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q kks-hgs-fw0 nc -q0 %h %p"
+        kks-grw-fw1:
+          ansible_host: 86.105.232.94
+          ansible_user: root
+        kks-grw-srv03:
+          ansible_host: 172.18.10.3
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q kks-grw-fw1 nc -q0 %h %p"
+        kks-grw-red1:
+          ansible_host: 172.18.10.7
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q kks-grw-fw1 nc -q0 %h %p"
+        kks-grw-misc1:
+          ansible_host: 172.18.10.5
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q kks-grw-fw1 nc -q0 %h %p"
+    wkr:
+      hosts:
+        wkr-beheer:
+          ansible_host: beheer.wijakoers.nl
+          ansible_user: root
+        wkr-lin12dom2:
+          ansible_host: traveler.kks.nl
+          ansible_user: root
+        wkr-lin12dom3:
+          ansible_host: 89.33.65.216
+          ansible_user: root
+        wkr-mx2:
+          ansible_host: mx2.wijakoers.nl
+          ansible_user: root
+        wkr-dom0:
+          ansible_host: 172.17.10.11
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q wkr-fw nc -q0 %h %p"
+        wkr-bck0:
+          ansible_host: 172.17.10.8
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q wkr-fw nc -q0 %h %p"
+        wkr-mx1:
+          ansible_host: mx1.wijakoers.nl
+          ansible_user: root
+        wkr-p11:
+          ansible_host: p11.wijakoers.nl
+          ansible_user: root
+        wkr-fw:
+          ansible_host: 89.33.65.210
+          ansible_user: root
+        wkr-lin12dom1:
+          ansible_host: 172.17.10.1
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q wkr-fw nc -q0 %h %p"
+    wts:
+      hosts:
+        wts-fw:
+          ansible_host: 84.82.166.81
+          ansible_user: root
+    vinke:
+      hosts:
+        vinke-samba:
+          ansible_host: 92.67.197.30
+          ansible_user: root
+    wildryck:
+      hosts:
+        wildryck-fw:
+          ansible_host: 217.100.110.114
+          ansible_user: root
+        wildryck-dom0:
+          ansible_host: 192.168.72.11
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q wildryck-fw nc -q0 %h %p"
+    meilof:
+      hosts:
+        meilof-agrab:
+          ansible_host: 89.33.30.115
+          ansible_user: root
+        meilof-havelte:
+          ansible_host: 92.70.255.55
+          ansible_user: root
+        meilof-hoogersmilde:
+          ansible_host: vpn.meilof-smilde.nl
+          ansible_user: root
+        meilof-dom0:
+          ansible_host: 192.168.44.2
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q meilof-hoogersmilde nc
+            -q0 %h %p"
+    pkn:
+      hosts:
+        pkn-assen:
+          ansible_host: 213.124.100.5
+          ansible_user: root
+        pkn-dom0:
+          ansible_host: 192.168.58.253
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q pkn-assen nc -q0 %h %p"
+    pga:
+      hosts:
+        pga-xcp-ng-01:
+          ansible_host: 192.168.58.16
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 192.168.4.9 nc -q0 %h %p"
+        pga-xoa:
+          ansible_host: 192.168.58.17
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 192.168.4.9 nc -q0 %h %p"
+    graafstra:
+      hosts:
+        graafstra-fw:
+          ansible_host: 149.143.30.26
+          ansible_user: root
+        graafstra-sleeweg:
+          ansible_host: 149.143.29.163
+          ansible_user: root
+        graafstra-dom0:
+          ansible_host: 192.168.72.205
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q graafstra-fw nc -q0 %h
+            %p"
+    jansma:
+      hosts:
+        jansma-dom0:
+          ansible_host: 77.170.4.124
+          ansible_user: root
+    dijk:
+      hosts:
+        dijk-fw:
+          ansible_host: vandijkinstallatie.kosdata.eu
+          ansible_user: root
+    stevens:
+      hosts:
+        stevens-fw:
+          ansible_host: vpn.stevensenpartners.nl
+          ansible_user: root
+        stevens-dom0:
+          ansible_host: 192.168.70.2
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q stevens-fw nc -q0 %h %p"
+    jager:
+      hosts:
+        jager-toren:
+          ansible_host: vpn.jagerafbouw.nl
+          ansible_user: root
+        jager-dom0:
+          ansible_host: 192.168.14.2
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q jager-toren nc -q0 %h %p"
+    interblad:
+      hosts:
+        interblad-fw:
+          ansible_host: mail.interblad.nl
+          ansible_user: root
+        interblad-xenserver:
+          ansible_host: 192.168.75.4
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q interblad-fw nc -q0 %h
+            %p"
+        interblad-order1:
+          ansible_host: 192.168.75.3
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q interblad-fw nc -q0 %h
+            %p"
+    kortbeheer:
+      hosts:
+        kortbeheer-dom0:
+          ansible_host: 192.168.61.2
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 5.22.252.153 nc -q0 %h
+            %p"
+        kortbeheer-toren:
+          ansible_host: 192.168.61.1
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 5.22.252.153 nc -q0 %h
+            %p"
+        kortbeheer-misc:
+          ansible_host: 192.168.70.2
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 5.22.252.153 nc -q0 %h
+            %p"
+    doornenbal:
+      hosts:
+        doornenbal-toren-dom0:
+          ansible_host: 192.168.41.2
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 5.22.252.144 nc -q0 %h
+            %p"
+        doornenbal-toren-fw:
+          ansible_host: 192.168.41.1
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 5.22.252.144 nc -q0 %h
+            %p"
+        doornenbal-toren-js1:
+          ansible_host: 192.168.41.3
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 5.22.252.144 nc -q0 %h
+            %p"
+    intechneau:
+      hosts:
+        intechneau-toren-fw:
+          ansible_host: 5.22.252.155
+          ansible_user: root
+        intechneau-toren-dom0:
+          ansible_host: 192.168.88.2
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 5.22.252.155 nc -q0 %h
+            %p"
+        intechneau-fw:
+          ansible_host: 188.120.44.238
+          ansible_user: root
+    vanegten:
+      hosts:
+        vanegten-toren-fw:
+          ansible_host: 5.22.252.130
+          ansible_user: root
+        vanegten-toren-dom0:
+          ansible_host: 192.168.89.2
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 5.22.252.130 nc -q0 %h
+            %p"
+        vanegten-toren-js1:
+          ansible_host: 192.168.89.60
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q 5.22.252.130 nc -q0 %h
+            %p"
+        vanegten-beilen-fw:
+          ansible_host: 89.47.181.163
+          ansible_user: root
+    rswelding:
+      hosts:
+        rswelding-fw:
+          ansible_host: 83.174.142.98
+          ansible_user: root
+    vfa:
+      hosts:
+        vfa-fw:
+          ansible_host: 89.32.247.242
+          ansible_user: root
+    regteren:
+      hosts:
+        regteren-dom0:
+          ansible_host: regteren.kosdata.eu
+          ansible_user: root
+    staalbouw:
+      hosts:
+        staalbouw-fw0:
+          ansible_host: 62.45.90.220
+          ansible_user: root
+        staalbouw-lin10sbc1:
+          ansible_host: 192.168.1.160
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q staalbouw-fw0 nc -q0 %h
+            %p"
+        staalbouw-xoa:
+          ansible_host: 192.168.1.6
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q staalbouw-fw0 nc -q0 %h
+            %p"
+        staalbouw-dom0:
+          ansible_host: 192.168.1.5
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q staalbouw-fw0 nc -q0 %h
+            %p"
+    elpenhof:
+      hosts:
+        elpenhof-toren:
+          ansible_host: 5.22.252.139
+          ansible_user: root
+        elpenhof-xoa:
+          ansible_host: 192.168.44.3
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q elpenhof-toren nc -q0 %h
+            %p"
+        elpenhof-dom0:
+          ansible_host: 192.168.44.2
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q elpenhof-toren nc -q0 %h
+            %p"
+    tandarts:
+      hosts:
+        tandarts-appelscha-misc:
+          ansible_host: 62.45.198.22
+          ansible_user: root
+        tandarts-appelscha-xoa:
+          ansible_host: 192.168.62.4
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q tandarts-appelscha-misc
+            nc -q0 %h %p"
+        tandarts-appelscha-xcp-ng-01:
+          ansible_host: 192.168.62.3
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q tandarts-appelscha-misc
+            nc -q0 %h %p"
+    harryvanegten:
+      hosts:
+        harryvanegten-toren-fw:
+          ansible_host: 5.22.252.133
+          ansible_user: root
+        harryvanegten-beilen:
+          ansible_host: 31.149.233.249
+          ansible_user: root
+        harryvanegten-toren-xoa:
+          ansible_host: 192.168.77.3
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q harryvanegten-toren-fw
+            nc -q0 %h %p"
+        harryvanegten-toren-xcp-ng-01:
+          ansible_host: 192.168.77.2
+          ansible_user: root
+          ansible_ssh_common_args: -o ProxyCommand="ssh -q harryvanegten-toren-fw
+            nc -q0 %h %p"
+    scandi:
+      hosts:
+        scandi-lin13nx1:
+          ansible_host: 185.103.18.162
+          ansible_user: root
+    jansensmit:
+      hosts:
+        jansensmit-proxmox:
+          ansible_host: 92.68.161.57
+          ansible_user: root
+    hemos:
+      hosts:
+        hemos-lin13misc1:
+          ansible_host: 217.120.56.237
+          ansible_user: root
+    hut:
+      hosts:
+        hut-lin13misc1:
+          ansible_host: 77.174.101.250
+          ansible_user: root
+

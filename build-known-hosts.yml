@@ -1,4 +1,3 @@
----
 - name: Bootstrap playbook
   # Don't gather facts automatically because that will trigger
   # a connection, which needs to check the remote host key

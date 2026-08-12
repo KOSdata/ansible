@@ -1,6 +1,11 @@
 ---
-- name: Patch all non-jump Debian hosts first
-  hosts: all:!jump_hosts
+###########################################################################
+# Phase 1
+# Normal Linux servers
+###########################################################################
+
+- name: Patch normal Debian hosts first
+  hosts: all:!jump_hosts:!hypervisors
   become: true
   gather_facts: false
   serial: "{{ patch_serial | default('100%') }}"
@@ -10,9 +15,30 @@
     reboot_timeout: 1800
 
   tasks:
-    - name: Run Debian update workflow
-      ansible.builtin.import_tasks: debian-update-host.yml
+    - import_tasks: tasks/debian-update-host.yml
 
+###########################################################################
+# Phase 2
+# Hypervisors
+###########################################################################
+
+- name: Patch hypervisors second
+  hosts: hypervisors
+  become: true
+  gather_facts: false
+  serial: 1
+
+  vars:
+    apt_lock_timeout: 600
+    reboot_timeout: 1800
+
+  tasks:
+    - import_tasks: tasks/debian-update-host.yml
+
+###########################################################################
+# Phase 3
+# Jump hosts
+###########################################################################
 
 - name: Patch jump hosts last
   hosts: jump_hosts
@@ -25,5 +51,4 @@
     reboot_timeout: 1800
 
   tasks:
-    - name: Run Debian update workflow for jump hosts
-      ansible.builtin.import_tasks: debian-update-host.yml
+    - import_tasks: tasks/debian-update-host.yml

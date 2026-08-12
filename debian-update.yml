@@ -46,4 +46,4 @@
 
   tasks:
     - name: Run Debian update workflow for jump hosts
-      ansible.builtin.import_tasks: tasks/debian-update-host.yml
+      ansible.builtin.import_tasks: debian-update-host.yml

@@ -2,6 +2,7 @@
   # Don't gather facts automatically because that will trigger
   # a connection, which needs to check the remote host key
   gather_facts: false
+  hosts: all
 
   tasks:
     - name: Check known_hosts for {{ inventory_hostname }}

@@ -9,16 +9,6 @@
     apt_lock_timeout: 600
     reboot_timeout: 1800
 
-    service_restart_denylist:
-      - ssh.service
-      - sshd.service
-      - dbus.service
-      - systemd-logind.service
-      - networking.service
-      - NetworkManager.service
-      - systemd-resolved.service
-      - systemd-networkd.service
-
   tasks:
     - name: Run Debian update workflow
       ansible.builtin.import_tasks: debian-update-host.yml
@@ -33,16 +23,6 @@
   vars:
     apt_lock_timeout: 600
     reboot_timeout: 1800
-
-    service_restart_denylist:
-      - ssh.service
-      - sshd.service
-      - dbus.service
-      - systemd-logind.service
-      - networking.service
-      - NetworkManager.service
-      - systemd-resolved.service
-      - systemd-networkd.service
 
   tasks:
     - name: Run Debian update workflow for jump hosts

@@ -799,6 +799,7 @@ all:
         elpenhof-dom0: {}
         ewhfts-dom0: {}
         graafstra-dom0: {}
+        harryvanegten-toren-xcp-ng-01: {}
         iedema-lin10dom0-1: {}
         iedema-lin10dom0-2: {}
         iedema-xenserver: {}
@@ -820,9 +821,11 @@ all:
         meilof-dom0: {}
         mesken-dom0: {}
         mesken-dom0-1: {}
+        mesken-xcp-ng: {}
         moes-dom0: {}
         offringa-vpn-dom0: {}
         oosterboer-xenserver: {}
+        pga-xcp-ng-01: {}
         pkn-dom0: {}
         regteren-dom0: {}
         schaaphok-dom0: {}
@@ -830,6 +833,7 @@ all:
         steegklop-dom0: {}
         stevens-dom0: {}
         strijker-toren-dom0: {}
+        tandarts-appelscha-xcp-ng-01: {}
         vanegten-toren-dom0: {}
         wasse-dom0: {}
         wiechers-dom0: {}

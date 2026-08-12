@@ -17,11 +17,11 @@ all:
         kosdata-hgs-dom0:
           ansible_host: 192.168.26.2
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kosdata-hgs-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@5.22.252.150 nc -q0 %h %p"
         kosdata-hgs-sql:
           ansible_host: 192.168.26.4
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kosdata-hgs-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@5.22.252.150 nc -q0 %h %p"
         kosdata-grn-dom0:
           ansible_host: 192.168.28.2
           ansible_user: root
@@ -118,11 +118,11 @@ all:
         vredeveld-toren-lin12prx0:
           ansible_host: 172.31.10.2
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@vredeveld-toren-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@datatoren.vredeveld.eu nc -q0 %h %p"
         vredeveld-toren-lin12misc1:
           ansible_host: 172.25.10.30
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@vredeveld-toren-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@datatoren.vredeveld.eu nc -q0 %h %p"
         vredeveld-hoogersmilde:
           ansible_host: 92.68.187.109
           ansible_user: root
@@ -172,11 +172,11 @@ all:
         schaaphok-dom0:
           ansible_host: 192.168.100.5
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@schaaphok-toren nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@5.22.252.140 nc -q0 %h %p"
         schaaphok-assen:
           ansible_host: 192.168.90.1
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@schaaphok-toren nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@5.22.252.140 nc -q0 %h %p"
     oosterboer:
       hosts:
         oosterboer-xenserver:
@@ -198,7 +198,7 @@ all:
         zoer-dom0:
           ansible_host: 192.168.64.15
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@zoer-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@217.100.252.210 nc -q0 %h %p"
     cape:
       hosts:
         cape-fw:
@@ -278,19 +278,19 @@ all:
         ewhfts-dom0:
           ansible_host: 192.168.32.3
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@ewhfts-toren-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@5.22.252.146 nc -q0 %h %p"
         ewhfts-unifi:
           ansible_host: 192.168.32.160
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@ewhfts-toren-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@5.22.252.146 nc -q0 %h %p"
         ewhfts-monitor:
           ansible_host: 192.168.32.150
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@ewhfts-toren-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@5.22.252.146 nc -q0 %h %p"
         ewhfts-nextcloud:
           ansible_host: 192.168.32.141
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@ewhfts-toren-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@5.22.252.146 nc -q0 %h %p"
         ewhfts-mib:
           ansible_host: 77.172.83.158
           ansible_user: root
@@ -305,31 +305,31 @@ all:
         mesken-misc12:
           ansible_host: 172.17.10.13
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@mesken-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@mail.mesken-bv.nl nc -q0 %h %p"
         mesken-dom0:
           ansible_host: 172.16.10.8
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@mesken-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@mail.mesken-bv.nl nc -q0 %h %p"
         mesken-dom0-1:
           ansible_host: 172.17.10.0
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@mesken-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@mail.mesken-bv.nl nc -q0 %h %p"
         mesken-xcp-ng:
           ansible_host: 172.17.10.10
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@mesken-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@mail.mesken-bv.nl nc -q0 %h %p"
         mesken-psql:
           ansible_host: 172.16.10.6
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@mesken-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@mail.mesken-bv.nl nc -q0 %h %p"
         mesken-gebros:
           ansible_host: 172.18.0.1
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@mesken-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@mail.mesken-bv.nl nc -q0 %h %p"
         mesken-xoa:
           ansible_host: 172.17.10.7
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@mesken-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@mail.mesken-bv.nl nc -q0 %h %p"
     tts:
       hosts:
         tts-fw:
@@ -399,11 +399,11 @@ all:
         strijker-toren-dom0:
           ansible_host: 192.168.64.3
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@strijker-toren nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@5.22.252.145 nc -q0 %h %p"
         strijker-toren-xoa:
           ansible_host: 192.168.64.4
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@strijker-toren nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@5.22.252.145 nc -q0 %h %p"
     kks:
       hosts:
         kks-hgs-fw0:
@@ -412,62 +412,62 @@ all:
         kks-hgs-san0:
           ansible_host: 172.0.10.11
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs-fw0 nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs.kks.nl nc -q0 %h %p"
         kks-hgs-san1:
           ansible_host: 172.0.10.10
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs-fw0 nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs.kks.nl nc -q0 %h %p"
         kks-hgs-dom0:
           ansible_host: 172.16.10.11
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs-fw0 nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs.kks.nl nc -q0 %h %p"
         kks-hgs-dom0-5:
           ansible_host: 172.16.10.16
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs-fw0 nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs.kks.nl nc -q0 %h %p"
         kks-hgs-dom0-6:
           ansible_host: 172.16.10.18
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs-fw0 nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs.kks.nl nc -q0 %h %p"
         kks-hgs-dom0-7:
           ansible_host: 172.17.10.5
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@wkr-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@89.33.65.210 nc -q0 %h %p"
         kks-hgs-dom1:
           ansible_host: 172.17.10.11
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs-fw0 nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs.kks.nl nc -q0 %h %p"
         kks-hgs-lin12srv1:
           ansible_host: 172.16.10.5
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs-fw0 nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs.kks.nl nc -q0 %h %p"
         kks-hgs-domino1:
           ansible_host: 172.16.10.1
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs-fw0 nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs.kks.nl nc -q0 %h %p"
         kks-hgs-misc1:
           ansible_host: 172.16.10.3
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs-fw0 nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs.kks.nl nc -q0 %h %p"
         kks-grn-fw1:
           ansible_host: 172.19.0.1
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs-fw0 nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-hgs.kks.nl nc -q0 %h %p"
         kks-grw-fw1:
           ansible_host: 86.105.232.94
           ansible_user: root
         kks-grw-srv03:
           ansible_host: 172.18.10.3
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-grw-fw1 nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@86.105.232.94 nc -q0 %h %p"
         kks-grw-red1:
           ansible_host: 172.18.10.7
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-grw-fw1 nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@86.105.232.94 nc -q0 %h %p"
         kks-grw-misc1:
           ansible_host: 172.18.10.5
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@kks-grw-fw1 nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@86.105.232.94 nc -q0 %h %p"
     wkr:
       hosts:
         wkr-beheer:
@@ -485,11 +485,11 @@ all:
         wkr-dom0:
           ansible_host: 172.17.10.11
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@wkr-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@89.33.65.210 nc -q0 %h %p"
         wkr-bck0:
           ansible_host: 172.17.10.8
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@wkr-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@89.33.65.210 nc -q0 %h %p"
         wkr-mx1:
           ansible_host: mx1.wijakoers.nl
           ansible_user: root
@@ -502,7 +502,7 @@ all:
         wkr-lin12dom1:
           ansible_host: 172.17.10.1
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@wkr-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@89.33.65.210 nc -q0 %h %p"
     wts:
       hosts:
         wts-fw:
@@ -521,7 +521,7 @@ all:
         wildryck-dom0:
           ansible_host: 192.168.72.11
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@wildryck-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@217.100.110.114 nc -q0 %h %p"
     meilof:
       hosts:
         meilof-agrab:
@@ -536,7 +536,7 @@ all:
         meilof-dom0:
           ansible_host: 192.168.44.2
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@meilof-hoogersmilde nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@vpn.meilof-smilde.nl nc -q0 %h %p"
     pkn:
       hosts:
         pkn-assen:
@@ -545,7 +545,7 @@ all:
         pkn-dom0:
           ansible_host: 192.168.58.253
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@pkn-assen nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@213.124.100.5 nc -q0 %h %p"
     pga:
       hosts:
         pga-xcp-ng-01:
@@ -567,7 +567,7 @@ all:
         graafstra-dom0:
           ansible_host: 192.168.72.205
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@graafstra-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@149.143.30.26 nc -q0 %h %p"
     jansma:
       hosts:
         jansma-dom0:
@@ -586,7 +586,7 @@ all:
         stevens-dom0:
           ansible_host: 192.168.70.2
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@stevens-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@vpn.stevensenpartners.nl nc -q0 %h %p"
     jager:
       hosts:
         jager-toren:
@@ -595,7 +595,7 @@ all:
         jager-dom0:
           ansible_host: 192.168.14.2
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@jager-toren nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@vpn.jagerafbouw.nl nc -q0 %h %p"
     interblad:
       hosts:
         interblad-fw:
@@ -604,11 +604,11 @@ all:
         interblad-xenserver:
           ansible_host: 192.168.75.4
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@interblad-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@mail.interblad.nl nc -q0 %h %p"
         interblad-order1:
           ansible_host: 192.168.75.3
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@interblad-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@mail.interblad.nl nc -q0 %h %p"
     kortbeheer:
       hosts:
         kortbeheer-dom0:
@@ -688,15 +688,15 @@ all:
         staalbouw-lin10sbc1:
           ansible_host: 192.168.1.160
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@staalbouw-fw0 nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@62.45.90.220 nc -q0 %h %p"
         staalbouw-xoa:
           ansible_host: 192.168.1.6
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@staalbouw-fw0 nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@62.45.90.220 nc -q0 %h %p"
         staalbouw-dom0:
           ansible_host: 192.168.1.5
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@staalbouw-fw0 nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@62.45.90.220 nc -q0 %h %p"
     elpenhof:
       hosts:
         elpenhof-toren:
@@ -705,11 +705,11 @@ all:
         elpenhof-xoa:
           ansible_host: 192.168.44.3
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@elpenhof-toren nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@5.22.252.139 nc -q0 %h %p"
         elpenhof-dom0:
           ansible_host: 192.168.44.2
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@elpenhof-toren nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@5.22.252.139 nc -q0 %h %p"
     tandarts:
       hosts:
         tandarts-appelscha-misc:
@@ -718,11 +718,11 @@ all:
         tandarts-appelscha-xoa:
           ansible_host: 192.168.62.4
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@tandarts-appelscha-misc nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@62.45.198.22 nc -q0 %h %p"
         tandarts-appelscha-xcp-ng-01:
           ansible_host: 192.168.62.3
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@tandarts-appelscha-misc nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@62.45.198.22 nc -q0 %h %p"
     harryvanegten:
       hosts:
         harryvanegten-toren-fw:
@@ -734,11 +734,11 @@ all:
         harryvanegten-toren-xoa:
           ansible_host: 192.168.77.3
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@harryvanegten-toren-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@5.22.252.133 nc -q0 %h %p"
         harryvanegten-toren-xcp-ng-01:
           ansible_host: 192.168.77.2
           ansible_user: root
-          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@harryvanegten-toren-fw nc -q0 %h %p"
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q root@5.22.252.133 nc -q0 %h %p"
     scandi:
       hosts:
         scandi-lin13nx1:

@@ -1,5 +1,246 @@
 ---
 ###########################################################################
+# playbooks/tasks/debian-update-host.yml
+#
+# Debian 11/12/13 update workflow
+#
+# Doet:
+# - Controleert Debian versie
+# - Draait apt update
+# - Simuleert dist-upgrade voor rapportage
+# - Installeert lsof indien nodig
+# - Draait apt dist-upgrade
+# - Reboot als /run/reboot-required of /var/run/reboot-required bestaat
+# - Herstart services op basis van package mapping, alleen als service bestaat en enabled is
+# - Draait daarna lsof +L1
+# - Als lsof iets vindt: herstart uosserver/unifi/alfresco indien aanwezig en enabled
+# - Herstart daarna services die via lsof gevonden zijn, behalve denylist en user@*.service
+# - Draait daarna opnieuw lsof +L1
+# - Als er dan nog processen met deleted files zijn: toont procesdetails en reboot
+###########################################################################
+
+###########################################################################
+# Defaults
+###########################################################################
+
+- name: Set default variables when not provided by wrapper playbook
+  ansible.builtin.set_fact:
+    apt_lock_timeout_effective: "{{ apt_lock_timeout | default(600) }}"
+    reboot_timeout_effective: "{{ reboot_timeout | default(1800) }}"
+
+###########################################################################
+# Static variables
+###########################################################################
+
+- name: Set update workflow variables
+  ansible.builtin.set_fact:
+    service_restart_denylist_exact:
+      - ssh.service
+      - sshd.service
+      - dbus.service
+      - systemd-logind.service
+      - networking.service
+      - NetworkManager.service
+      - systemd-resolved.service
+      - systemd-networkd.service
+
+    service_restart_denylist_regex:
+      - '^user@[0-9]+\.service$'
+
+    special_services_when_lsof_hits:
+      - uosserver.service
+      - unifi.service
+      - alfresco.service
+
+    package_service_map:
+      - package_regex: '^(nginx|nginx-.*|libnginx.*)$'
+        services:
+          - nginx.service
+
+      - package_regex: '^(apache2|apache2-.*|libapache2-.*)$'
+        services:
+          - apache2.service
+
+      - package_regex: '^(lighttpd|lighttpd-.*)$'
+        services:
+          - lighttpd.service
+
+      - package_regex: '^(php[0-9]\.[0-9]-fpm|php-fpm)$'
+        services:
+          - php7.4-fpm.service
+          - php8.0-fpm.service
+          - php8.1-fpm.service
+          - php8.2-fpm.service
+          - php8.3-fpm.service
+          - php8.4-fpm.service
+
+      - package_regex: '^(php|php-.*|php[0-9]\.[0-9]|php[0-9]\.[0-9]-.*)$'
+        services:
+          - php7.4-fpm.service
+          - php8.0-fpm.service
+          - php8.1-fpm.service
+          - php8.2-fpm.service
+          - php8.3-fpm.service
+          - php8.4-fpm.service
+          - apache2.service
+          - nginx.service
+
+      - package_regex: '^(postgresql|postgresql-.*|postgresql-[0-9]+|postgresql-client.*|libpq.*)$'
+        services:
+          - postgresql.service
+          - postgresql@11-main.service
+          - postgresql@12-main.service
+          - postgresql@13-main.service
+          - postgresql@14-main.service
+          - postgresql@15-main.service
+          - postgresql@16-main.service
+          - postgresql@17-main.service
+
+      - package_regex: '^(mariadb|mariadb-.*|mysql|mysql-.*|default-mysql.*|galera-.*|libmariadb.*|libmysql.*)$'
+        services:
+          - mariadb.service
+          - mysql.service
+
+      - package_regex: '^(redis|redis-.*|redis-server)$'
+        services:
+          - redis-server.service
+
+      - package_regex: '^(memcached|libmemcached.*)$'
+        services:
+          - memcached.service
+
+      - package_regex: '^(mongodb|mongodb-.*|mongod|mongosh.*)$'
+        services:
+          - mongod.service
+          - mongodb.service
+
+      - package_regex: '^(rabbitmq-server|erlang|erlang-.*)$'
+        services:
+          - rabbitmq-server.service
+
+      - package_regex: '^(docker|docker-.*|docker-ce|docker-ce-cli|containerd|containerd.io|runc)$'
+        services:
+          - docker.service
+          - containerd.service
+
+      - package_regex: '^(postfix|postfix-.*)$'
+        services:
+          - postfix.service
+
+      - package_regex: '^(dovecot|dovecot-.*)$'
+        services:
+          - dovecot.service
+
+      - package_regex: '^(exim4|exim4-.*)$'
+        services:
+          - exim4.service
+
+      - package_regex: '^(bind9|bind9-.*)$'
+        services:
+          - named.service
+          - bind9.service
+
+      - package_regex: '^(unbound|unbound-.*)$'
+        services:
+          - unbound.service
+
+      - package_regex: '^(isc-dhcp-server|kea|kea-.*)$'
+        services:
+          - isc-dhcp-server.service
+          - kea-dhcp4-server.service
+          - kea-dhcp6-server.service
+
+      - package_regex: '^(rsyslog|rsyslog-.*)$'
+        services:
+          - rsyslog.service
+
+      - package_regex: '^(zabbix-agent|zabbix-agent2|zabbix-.*)$'
+        services:
+          - zabbix-agent.service
+          - zabbix-agent2.service
+
+      - package_regex: '^(prometheus-node-exporter|node-exporter)$'
+        services:
+          - prometheus-node-exporter.service
+
+      - package_regex: '^(telegraf)$'
+        services:
+          - telegraf.service
+
+      - package_regex: '^(snmpd|snmp)$'
+        services:
+          - snmpd.service
+
+      - package_regex: '^(fail2ban)$'
+        services:
+          - fail2ban.service
+
+      - package_regex: '^(haproxy|haproxy-.*)$'
+        services:
+          - haproxy.service
+
+      - package_regex: '^(keepalived|keepalived-.*)$'
+        services:
+          - keepalived.service
+
+      - package_regex: '^(openvpn|openvpn-.*)$'
+        services:
+          - openvpn.service
+
+      - package_regex: '^(wireguard|wireguard-.*)$'
+        services:
+          - wg-quick@wg0.service
+
+      - package_regex: '^(samba|samba-.*|smbd|nmbd|winbind)$'
+        services:
+          - smbd.service
+          - nmbd.service
+          - winbind.service
+
+      - package_regex: '^(nfs-kernel-server|nfs-common)$'
+        services:
+          - nfs-server.service
+          - nfs-kernel-server.service
+
+      - package_regex: '^(openjdk|openjdk-.*|default-jre|default-jdk|ca-certificates-java|java-common)$'
+        services:
+          - uosserver.service
+          - unifi.service
+          - alfresco.service
+          - tomcat9.service
+          - tomcat10.service
+
+      - package_regex: '^(tomcat9|tomcat10|tomcat.*)$'
+        services:
+          - tomcat9.service
+          - tomcat10.service
+
+      - package_regex: '^(alfresco|alfresco-.*)$'
+        services:
+          - alfresco.service
+
+      - package_regex: '^(unifi|unifi-.*|uos|uos-.*)$'
+        services:
+          - unifi.service
+          - uosserver.service
+
+      - package_regex: '^(elasticsearch|elasticsearch-.*)$'
+        services:
+          - elasticsearch.service
+
+      - package_regex: '^(logstash|logstash-.*)$'
+        services:
+          - logstash.service
+
+      - package_regex: '^(kibana|kibana-.*)$'
+        services:
+          - kibana.service
+
+      - package_regex: '^(cron|cron-.*)$'
+        services:
+          - cron.service
+
+###########################################################################
 # Pre-checks
 ###########################################################################
 
@@ -24,46 +265,38 @@
   failed_when: false
 
 ###########################################################################
-# Apt preflight and package list
+# APT preflight
 ###########################################################################
 
 - name: Update apt cache
   ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 1800
-    lock_timeout: "{{ apt_lock_timeout }}"
+    lock_timeout: "{{ apt_lock_timeout_effective }}"
 
-- name: Simulate apt dist-upgrade to capture package changes
+- name: Simulate apt dist-upgrade to capture raw planned package changes
   ansible.builtin.shell: |
     export DEBIAN_FRONTEND=noninteractive
-    apt-get -s dist-upgrade | awk '
-      /^Inst / {
-        pkg=$2
-        old=""
-        new=""
-        if (match($0, /\[([^]]+)\]/, a)) {
-          old=a[1]
-        }
-        if (match($0, /\(([^ ]+)/, b)) {
-          new=b[1]
-        }
-        if (old != "" && new != "") {
-          print pkg " " old " -> " new
-        } else {
-          print pkg
-        }
-      }
-    '
-  register: packages_to_upgrade
+    apt-get -s dist-upgrade | awk '/^Inst / {print}'
+  register: packages_to_upgrade_raw
   changed_when: false
   failed_when: false
 
-- name: Show packages that will be upgraded
+- name: Simulate apt dist-upgrade to capture package names only
+  ansible.builtin.shell: |
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get -s dist-upgrade | awk '/^Inst / {print $2}' | sort -u
+  register: packages_to_upgrade_plain
+  changed_when: false
+  failed_when: false
+
+- name: Show packages planned for upgrade
   ansible.builtin.debug:
     msg:
       host: "{{ inventory_hostname }}"
       fqdn: "{{ fqdn_before.stdout | default('unknown') }}"
-      packages_to_upgrade: "{{ packages_to_upgrade.stdout_lines | default([]) }}"
+      packages_to_upgrade_raw: "{{ packages_to_upgrade_raw.stdout_lines | default([]) }}"
+      packages_to_upgrade_plain: "{{ packages_to_upgrade_plain.stdout_lines | default([]) }}"
 
 ###########################################################################
 # Ensure lsof is available
@@ -79,7 +312,7 @@
   ansible.builtin.apt:
     name: lsof
     state: present
-    lock_timeout: "{{ apt_lock_timeout }}"
+    lock_timeout: "{{ apt_lock_timeout_effective }}"
   when: lsof_check.rc != 0
 
 ###########################################################################
@@ -91,7 +324,7 @@
     upgrade: dist
     autoremove: true
     autoclean: true
-    lock_timeout: "{{ apt_lock_timeout }}"
+    lock_timeout: "{{ apt_lock_timeout_effective }}"
   register: apt_upgrade
 
 ###########################################################################
@@ -125,13 +358,13 @@
   when: reboot_required | bool
 
 ###########################################################################
-# Direct reboot when Debian says reboot is required
+# Direct reboot if Debian explicitly requires it
 ###########################################################################
 
 - name: Reboot when reboot-required file is present
   ansible.builtin.reboot:
     msg: "Reboot initiated by AWX after Debian dist-upgrade because reboot-required file exists"
-    reboot_timeout: "{{ reboot_timeout }}"
+    reboot_timeout: "{{ reboot_timeout_effective }}"
     connect_timeout: 30
     pre_reboot_delay: 5
     post_reboot_delay: 20
@@ -146,11 +379,69 @@
   when: reboot_required | bool
 
 ###########################################################################
-# Needrestart-like logic using lsof
-# Only runs when no full reboot is already required
+# Package mapping based restarts before lsof check
 ###########################################################################
 
-- name: Find processes using deleted files with lsof
+- name: Initialize mapped services list
+  ansible.builtin.set_fact:
+    services_from_package_mapping: []
+  when: not reboot_required | bool
+
+- name: Build service restart list from upgraded packages
+  ansible.builtin.set_fact:
+    services_from_package_mapping: "{{ services_from_package_mapping + item.services }}"
+  loop: "{{ package_service_map }}"
+  when:
+    - not reboot_required | bool
+    - packages_to_upgrade_plain.stdout_lines | default([]) | select('match', item.package_regex) | list | length > 0
+
+- name: Deduplicate mapped services
+  ansible.builtin.set_fact:
+    services_from_package_mapping: "{{ services_from_package_mapping | default([]) | unique | list }}"
+  when: not reboot_required | bool
+
+- name: Filter mapped services to existing and enabled services
+  ansible.builtin.shell: |
+    for svc in {{ services_from_package_mapping | default([]) | join(' ') }}; do
+      [ -n "$svc" ] || continue
+
+      if systemctl list-unit-files "$svc" --no-legend --no-pager 2>/dev/null | awk '{print $1}' | grep -qx "$svc"; then
+        state="$(systemctl is-enabled "$svc" 2>/dev/null || true)"
+        case "$state" in
+          enabled|enabled-runtime|alias)
+            echo "$svc"
+            ;;
+        esac
+      fi
+    done | sort -u
+  register: mapped_services_enabled_raw
+  changed_when: false
+  failed_when: false
+  when:
+    - not reboot_required | bool
+    - services_from_package_mapping | default([]) | length > 0
+
+- name: Set enabled mapped services fact
+  ansible.builtin.set_fact:
+    mapped_services_enabled: "{{ mapped_services_enabled_raw.stdout_lines | default([]) }}"
+  when: not reboot_required | bool
+
+- name: Restart enabled services based on package mapping
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: restarted
+  loop: "{{ mapped_services_enabled | default([]) }}"
+  register: package_mapping_restart_result
+  failed_when: false
+  when:
+    - not reboot_required | bool
+    - mapped_services_enabled | default([]) | length > 0
+
+###########################################################################
+# lsof check after package mapping restarts
+###########################################################################
+
+- name: Find processes using deleted files with lsof after package mapping restarts
   ansible.builtin.shell: |
     lsof -nP +L1 2>/dev/null | awk 'NR > 1 {print $2}' | sort -u
   register: affected_pids_raw
@@ -161,6 +452,39 @@
 - name: Set affected PIDs fact
   ansible.builtin.set_fact:
     affected_pids: "{{ affected_pids_raw.stdout_lines | default([]) }}"
+  when: not reboot_required | bool
+
+- name: Capture affected process details before lsof action
+  ansible.builtin.shell: |
+    for pid in {{ affected_pids | default([]) | join(' ') }}; do
+      [ -d "/proc/$pid" ] || continue
+
+      comm="$(cat "/proc/$pid/comm" 2>/dev/null || true)"
+
+      service="$(awk -F/ '
+        {
+          for (i=1; i<=NF; i++) {
+            if ($i ~ /\.service$/) {
+              print $i
+            }
+          }
+        }
+      ' "/proc/$pid/cgroup" 2>/dev/null | head -n1)"
+
+      deleted_files="$(lsof -nP -p "$pid" +L1 2>/dev/null | awk 'NR > 1 {print $9}' | sort -u | paste -sd "," -)"
+
+      echo "pid=$pid command=$comm service=${service:-none} deleted_files=${deleted_files:-unknown}"
+    done | sort -u
+  register: affected_process_details_raw
+  changed_when: false
+  failed_when: false
+  when:
+    - not reboot_required | bool
+    - affected_pids | default([]) | length > 0
+
+- name: Set affected process details fact
+  ansible.builtin.set_fact:
+    affected_process_details: "{{ affected_process_details_raw.stdout_lines | default([]) }}"
   when: not reboot_required | bool
 
 - name: Map affected PIDs to systemd services
@@ -190,11 +514,157 @@
     affected_services: "{{ affected_services_raw.stdout_lines | default([]) }}"
   when: not reboot_required | bool
 
-- name: Capture affected non-service processes
+###########################################################################
+# Special service restarts when lsof found anything
+###########################################################################
+
+- name: Filter special services to existing and enabled services when lsof found affected processes
   ansible.builtin.shell: |
-    for pid in {{ affected_pids | default([]) | join(' ') }}; do
-      [ -r "/proc/$pid/cgroup" ] || continue
-      [ -r "/proc/$pid/comm" ] || continue
+    for svc in {{ special_services_when_lsof_hits | join(' ') }}; do
+      if systemctl list-unit-files "$svc" --no-legend --no-pager 2>/dev/null | awk '{print $1}' | grep -qx "$svc"; then
+        state="$(systemctl is-enabled "$svc" 2>/dev/null || true)"
+        case "$state" in
+          enabled|enabled-runtime|alias)
+            echo "$svc"
+            ;;
+        esac
+      fi
+    done | sort -u
+  register: special_services_enabled_raw
+  changed_when: false
+  failed_when: false
+  when:
+    - not reboot_required | bool
+    - affected_pids | default([]) | length > 0
+
+- name: Set enabled special services fact
+  ansible.builtin.set_fact:
+    special_services_enabled: "{{ special_services_enabled_raw.stdout_lines | default([]) }}"
+  when: not reboot_required | bool
+
+- name: Restart enabled special application services because lsof found affected processes
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: restarted
+  loop: "{{ special_services_enabled | default([]) }}"
+  register: special_service_restart_result
+  failed_when: false
+  when:
+    - not reboot_required | bool
+    - affected_pids | default([]) | length > 0
+    - special_services_enabled | default([]) | length > 0
+
+###########################################################################
+# lsof based systemd service restarts
+###########################################################################
+
+- name: Filter lsof affected services to safe, existing and enabled services
+  ansible.builtin.shell: |
+    for svc in {{ affected_services | default([]) | join(' ') }}; do
+      [ -n "$svc" ] || continue
+
+      case "$svc" in
+        {% for denied in service_restart_denylist_exact %}
+        {{ denied }}) continue ;;
+        {% endfor %}
+      esac
+
+      if echo "$svc" | grep -Eq '{{ service_restart_denylist_regex | join("|") }}'; then
+        continue
+      fi
+
+      if systemctl list-unit-files "$svc" --no-legend --no-pager 2>/dev/null | awk '{print $1}' | grep -qx "$svc"; then
+        state="$(systemctl is-enabled "$svc" 2>/dev/null || true)"
+        case "$state" in
+          enabled|enabled-runtime|alias)
+            echo "$svc"
+            ;;
+        esac
+      fi
+    done | sort -u
+  register: lsof_restartable_services_enabled_raw
+  changed_when: false
+  failed_when: false
+  when:
+    - not reboot_required | bool
+    - affected_services | default([]) | length > 0
+
+- name: Set lsof restartable enabled services fact
+  ansible.builtin.set_fact:
+    lsof_restartable_services_enabled: "{{ lsof_restartable_services_enabled_raw.stdout_lines | default([]) }}"
+  when: not reboot_required | bool
+
+- name: Capture lsof affected services skipped by denylist
+  ansible.builtin.shell: |
+    for svc in {{ affected_services | default([]) | join(' ') }}; do
+      [ -n "$svc" ] || continue
+      skipped="false"
+
+      case "$svc" in
+        {% for denied in service_restart_denylist_exact %}
+        {{ denied }}) skipped="true" ;;
+        {% endfor %}
+      esac
+
+      if echo "$svc" | grep -Eq '{{ service_restart_denylist_regex | join("|") }}'; then
+        skipped="true"
+      fi
+
+      if [ "$skipped" = "true" ]; then
+        echo "$svc"
+      fi
+    done | sort -u
+  register: lsof_skipped_services_raw
+  changed_when: false
+  failed_when: false
+  when:
+    - not reboot_required | bool
+    - affected_services | default([]) | length > 0
+
+- name: Set skipped lsof services fact
+  ansible.builtin.set_fact:
+    lsof_skipped_services: "{{ lsof_skipped_services_raw.stdout_lines | default([]) }}"
+  when: not reboot_required | bool
+
+- name: Restart lsof affected enabled services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: restarted
+  loop: "{{ lsof_restartable_services_enabled | default([]) }}"
+  register: lsof_service_restart_result
+  failed_when: false
+  when:
+    - not reboot_required | bool
+    - lsof_restartable_services_enabled | default([]) | length > 0
+
+- name: Reload systemd daemon after service restarts
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: not reboot_required | bool
+
+###########################################################################
+# Final lsof check
+###########################################################################
+
+- name: Final lsof check after all restart actions
+  ansible.builtin.shell: |
+    lsof -nP +L1 2>/dev/null | awk 'NR > 1 {print $2}' | sort -u
+  register: final_affected_pids_raw
+  changed_when: false
+  failed_when: false
+  when: not reboot_required | bool
+
+- name: Set final affected PIDs fact
+  ansible.builtin.set_fact:
+    final_affected_pids: "{{ final_affected_pids_raw.stdout_lines | default([]) }}"
+  when: not reboot_required | bool
+
+- name: Capture final affected process details before forced reboot
+  ansible.builtin.shell: |
+    for pid in {{ final_affected_pids | default([]) | join(' ') }}; do
+      [ -d "/proc/$pid" ] || continue
+
+      comm="$(cat "/proc/$pid/comm" 2>/dev/null || true)"
 
       service="$(awk -F/ '
         {
@@ -204,152 +674,56 @@
             }
           }
         }
-      ' "/proc/$pid/cgroup" | head -n1)"
+      ' "/proc/$pid/cgroup" 2>/dev/null | head -n1)"
 
-      if [ -z "$service" ]; then
-        comm="$(cat /proc/$pid/comm 2>/dev/null || true)"
-        echo "$pid:$comm"
-      fi
+      deleted_files="$(lsof -nP -p "$pid" +L1 2>/dev/null | awk 'NR > 1 {print $9}' | sort -u | paste -sd "," -)"
+
+      echo "pid=$pid command=$comm service=${service:-none} deleted_files=${deleted_files:-unknown}"
     done | sort -u
-  register: affected_non_service_processes_raw
+  register: final_affected_process_details_raw
   changed_when: false
   failed_when: false
   when:
     - not reboot_required | bool
-    - affected_pids | default([]) | length > 0
+    - final_affected_pids | default([]) | length > 0
 
-- name: Set affected non-service processes fact
+- name: Set final affected process details fact
   ansible.builtin.set_fact:
-    affected_non_service_processes: "{{ affected_non_service_processes_raw.stdout_lines | default([]) }}"
+    final_affected_process_details: "{{ final_affected_process_details_raw.stdout_lines | default([]) }}"
   when: not reboot_required | bool
 
-###########################################################################
-# Decide restart vs reboot
-###########################################################################
-
-- name: Split restartable and skipped services
-  ansible.builtin.set_fact:
-    restartable_services: "{{ affected_services | default([]) | difference(service_restart_denylist) }}"
-    skipped_services: "{{ affected_services | default([]) | intersect(service_restart_denylist) }}"
-  when: not reboot_required | bool
-
-- name: Determine whether skipped services require reboot
-  ansible.builtin.set_fact:
-    reboot_due_to_skipped_services: "{{ (skipped_services | default([]) | length) > 0 }}"
-  when: not reboot_required | bool
-
-- name: Show affected processes and services before action
+- name: Show remaining lsof affected processes before forced reboot
   ansible.builtin.debug:
     msg:
       host: "{{ inventory_hostname }}"
       fqdn: "{{ fqdn_before.stdout | default('unknown') }}"
-      reboot_required_file_present: "{{ reboot_required }}"
-      affected_pids: "{{ affected_pids | default([]) }}"
-      affected_services: "{{ affected_services | default([]) }}"
-      restartable_services: "{{ restartable_services | default([]) }}"
-      skipped_services: "{{ skipped_services | default([]) }}"
-      affected_non_service_processes: "{{ affected_non_service_processes | default([]) }}"
-      reboot_due_to_skipped_services: "{{ reboot_due_to_skipped_services | default(false) }}"
-  when: not reboot_required | bool
+      reason: "Remaining deleted-file processes still exist after package mapping restarts, special service restarts and lsof service restarts. Server will reboot."
+      final_affected_pids: "{{ final_affected_pids | default([]) }}"
+      final_affected_process_details: "{{ final_affected_process_details | default([]) }}"
+  when:
+    - not reboot_required | bool
+    - final_affected_pids | default([]) | length > 0
 
-###########################################################################
-# Reboot when skipped/critical services are affected
-###########################################################################
-
-- name: Reboot when skipped/critical services require restart
+- name: Reboot when final lsof check still finds affected processes
   ansible.builtin.reboot:
-    msg: "Reboot initiated by AWX because critical/skipped service requires restart after Debian update"
-    reboot_timeout: "{{ reboot_timeout }}"
+    msg: "Reboot initiated by AWX because lsof still found processes using deleted files after service restart attempts"
+    reboot_timeout: "{{ reboot_timeout_effective }}"
     connect_timeout: 30
     pre_reboot_delay: 5
     post_reboot_delay: 20
     test_command: "hostname -f"
   when:
     - not reboot_required | bool
-    - reboot_due_to_skipped_services | default(false) | bool
+    - final_affected_pids | default([]) | length > 0
 
-- name: Get hostname after skipped-service reboot
+- name: Get hostname after final lsof forced reboot
   ansible.builtin.command: hostname -f
-  register: fqdn_after_skipped_service_reboot
+  register: fqdn_after_final_lsof_reboot
   changed_when: false
   failed_when: false
   when:
     - not reboot_required | bool
-    - reboot_due_to_skipped_services | default(false) | bool
-
-###########################################################################
-# Restart normal affected services when no reboot is needed
-###########################################################################
-
-- name: Restart affected restartable services
-  ansible.builtin.systemd:
-    name: "{{ item }}"
-    state: restarted
-  loop: "{{ restartable_services | default([]) }}"
-  register: restarted_services_result
-  failed_when: false
-  when:
-    - not reboot_required | bool
-    - not reboot_due_to_skipped_services | default(false) | bool
-    - restartable_services | default([]) | length > 0
-
-- name: Reload systemd daemon after service restarts
-  ansible.builtin.systemd:
-    daemon_reload: true
-  when:
-    - not reboot_required | bool
-    - not reboot_due_to_skipped_services | default(false) | bool
-
-###########################################################################
-# Post-check after service restarts
-###########################################################################
-
-- name: Re-scan affected processes after service restarts
-  ansible.builtin.shell: |
-    lsof -nP +L1 2>/dev/null | awk 'NR > 1 {print $2}' | sort -u
-  register: remaining_affected_pids_raw
-  changed_when: false
-  failed_when: false
-  when:
-    - not reboot_required | bool
-    - not reboot_due_to_skipped_services | default(false) | bool
-
-- name: Set remaining affected PIDs fact
-  ansible.builtin.set_fact:
-    remaining_affected_pids: "{{ remaining_affected_pids_raw.stdout_lines | default([]) }}"
-  when:
-    - not reboot_required | bool
-    - not reboot_due_to_skipped_services | default(false) | bool
-
-- name: Map remaining affected PIDs to services
-  ansible.builtin.shell: |
-    for pid in {{ remaining_affected_pids | default([]) | join(' ') }}; do
-      [ -r "/proc/$pid/cgroup" ] || continue
-
-      awk -F/ '
-        {
-          for (i=1; i<=NF; i++) {
-            if ($i ~ /\.service$/) {
-              print $i
-            }
-          }
-        }
-      ' "/proc/$pid/cgroup"
-    done | sort -u
-  register: remaining_affected_services_raw
-  changed_when: false
-  failed_when: false
-  when:
-    - not reboot_required | bool
-    - not reboot_due_to_skipped_services | default(false) | bool
-    - remaining_affected_pids | default([]) | length > 0
-
-- name: Set remaining affected services fact
-  ansible.builtin.set_fact:
-    remaining_affected_services: "{{ remaining_affected_services_raw.stdout_lines | default([]) }}"
-  when:
-    - not reboot_required | bool
-    - not reboot_due_to_skipped_services | default(false) | bool
+    - final_affected_pids | default([]) | length > 0
 
 ###########################################################################
 # Final summary
@@ -361,26 +735,21 @@
       host: "{{ inventory_hostname }}"
       fqdn_before: "{{ fqdn_before.stdout | default('unknown') }}"
       fqdn_after_reboot_required: "{{ fqdn_after_reboot_required.stdout | default('not rebooted by reboot-required') }}"
-      fqdn_after_skipped_service_reboot: "{{ fqdn_after_skipped_service_reboot.stdout | default('not rebooted by skipped service') }}"
+      fqdn_after_final_lsof_reboot: "{{ fqdn_after_final_lsof_reboot.stdout | default('not rebooted by final lsof check') }}"
       os_release: "{{ os_release.stdout | default('unknown') }}"
-      packages_planned_for_upgrade: "{{ packages_to_upgrade.stdout_lines | default([]) }}"
+      packages_planned_for_upgrade_raw: "{{ packages_to_upgrade_raw.stdout_lines | default([]) }}"
+      packages_planned_for_upgrade_plain: "{{ packages_to_upgrade_plain.stdout_lines | default([]) }}"
       apt_changed: "{{ apt_upgrade.changed | default(false) }}"
       reboot_required_file_present: "{{ reboot_required }}"
       reboot_required_packages: "{{ reboot_required_pkgs.stdout_lines | default([]) }}"
-      affected_pids_before_action: "{{ affected_pids | default([]) }}"
-      affected_services_before_action: "{{ affected_services | default([]) }}"
-      affected_non_service_processes_before_action: "{{ affected_non_service_processes | default([]) }}"
-      restartable_services: "{{ restartable_services | default([]) }}"
-      skipped_services: "{{ skipped_services | default([]) }}"
-      reboot_due_to_skipped_services: "{{ reboot_due_to_skipped_services | default(false) }}"
-      services_restarted: >-
-        {{
-          restartable_services | default([])
-          if (
-            not reboot_required | default(false) | bool
-            and not reboot_due_to_skipped_services | default(false) | bool
-          )
-          else []
-        }}
-      remaining_affected_pids_after_restart: "{{ remaining_affected_pids | default([]) }}"
-      remaining_affected_services_after_restart: "{{ remaining_affected_services | default([]) }}"
+      services_from_package_mapping: "{{ services_from_package_mapping | default([]) }}"
+      mapped_services_enabled_restarted: "{{ mapped_services_enabled | default([]) }}"
+      affected_pids_after_package_mapping: "{{ affected_pids | default([]) }}"
+      affected_process_details_after_package_mapping: "{{ affected_process_details | default([]) }}"
+      affected_services_after_package_mapping: "{{ affected_services | default([]) }}"
+      special_services_restarted_because_lsof_hit: "{{ special_services_enabled | default([]) }}"
+      lsof_restartable_services_restarted: "{{ lsof_restartable_services_enabled | default([]) }}"
+      lsof_skipped_services_due_to_denylist_or_regex: "{{ lsof_skipped_services | default([]) }}"
+      final_affected_pids_after_all_restart_actions: "{{ final_affected_pids | default([]) }}"
+      final_affected_process_details_after_all_restart_actions: "{{ final_affected_process_details | default([]) }}"
+      final_reboot_due_to_remaining_lsof_processes: "{{ (final_affected_pids | default([]) | length) > 0 }}"

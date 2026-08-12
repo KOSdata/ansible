@@ -759,3 +759,36 @@ all:
         hut-lin13misc1:
           ansible_host: 77.174.101.250
           ansible_user: root
+    jump_hosts:
+      hosts:
+        cape-fw: {}
+        elpenhof-toren: {}
+        ewhfts-toren-fw: {}
+        graafstra-fw: {}
+        harryvanegten-toren-fw: {}
+        iedema-toren: {}
+        intechneau-toren-fw: {}
+        interblad-fw: {}
+        jager-toren: {}
+        kks-grw-fw1: {}
+        kks-hgs-fw0: {}
+        kosdata-grn-fw: {}
+        kosdata-hgs-fw: {}
+        kosdata-ydentic-fw: {}
+        kremer-toren-fw: {}
+        meilof-hoogersmilde: {}
+        mesken-fw: {}
+        moes-fw: {}
+        oosterboer-misc: {}
+        pkn-assen: {}
+        schaaphok-toren: {}
+        staalbouw-fw0: {}
+        stevens-fw: {}
+        strijker-toren: {}
+        tandarts-appelscha-misc: {}
+        vanegten-toren-fw: {}
+        vredeveld-toren-fw: {}
+        wiechers-fw: {}
+        wildryck-fw: {}
+        wkr-fw: {}
+        zoer-fw: {}

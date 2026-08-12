@@ -1,0 +1,50 @@
+---
+###########################################################################
+# Pre-checks
+###########################################################################
+
+- name: Read /etc/os-release
+  ansible.builtin.shell: |
+    . /etc/os-release
+    echo "${ID}:${VERSION_ID}"
+  register: os_release
+  changed_when: false
+
+- name: Validate supported Debian version
+  ansible.builtin.assert:
+    that:
+      - os_release.stdout is match('^debian:(11|12|13)$')
+    fail_msg: "Unsupported OS/version for this playbook: {{ os_release.stdout }}"
+    success_msg: "Supported OS detected: {{ os_release.stdout }}"
+
+- name: Get hostname before update
+  ansible.builtin.command: hostname -f
+  register: fqdn_before
+  changed_when: false
+  failed_when: false
+
+###########################################################################
+# APT update / dist-upgrade
+###########################################################################
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 1800
+    lock_timeout: "{{ apt_lock_timeout }}"
+
+- name: Run apt dist-upgrade
+  ansible.builtin.apt:
+    upgrade: dist
+    autoremove: true
+    autoclean: true
+    lock_timeout: "{{ apt_lock_timeout }}"
+  register: apt_upgrade
+
+###########################################################################
+# Reboot-required check
+###########################################################################
+
+- name: Check whether reboot is required in /var/run
+  ansible.builtin.stat:
+    path: /var/run/

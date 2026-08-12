@@ -1,4 +1,13 @@
-all:
-  hosts:
-    localhost:
-      ansible_connection: local
+- name: Test inventory
+  hosts: all
+  gather_facts: false
+
+  tasks:
+
+    - name: Get FQDN
+      command: hostname -f
+      register: hostname_result
+
+    - name: Print hostname
+      debug:
+        msg: "Ik ben {{ hostname_result.stdout }}"

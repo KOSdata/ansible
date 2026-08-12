@@ -792,3 +792,47 @@ all:
         wildryck-fw: {}
         wkr-fw: {}
         zoer-fw: {}
+    hypervisors:
+      hosts:
+        bouwmijhendriks-dom0: {}
+        doornenbal-toren-dom0: {}
+        elpenhof-dom0: {}
+        ewhfts-dom0: {}
+        graafstra-dom0: {}
+        iedema-lin10dom0-1: {}
+        iedema-lin10dom0-2: {}
+        iedema-xenserver: {}
+        intechneau-toren-dom0: {}
+        interblad-xenserver: {}
+        jager-dom0: {}
+        jansma-dom0: {}
+        kks-hgs-dom0: {}
+        kks-hgs-dom0-5: {}
+        kks-hgs-dom0-6: {}
+        kks-hgs-dom0-7: {}
+        klay-dom0: {}
+        kortbeheer-dom0: {}
+        kosdata-grn-dom0: {}
+        kosdata-hgs-dom0: {}
+        kosdata-ydentic-dom0: {}
+        kremer-toren-dom0: {}
+        lbf-dom0-new: {}
+        meilof-dom0: {}
+        mesken-dom0: {}
+        mesken-dom0-1: {}
+        moes-dom0: {}
+        offringa-vpn-dom0: {}
+        oosterboer-xenserver: {}
+        pkn-dom0: {}
+        regteren-dom0: {}
+        schaaphok-dom0: {}
+        staalbouw-dom0: {}
+        steegklop-dom0: {}
+        stevens-dom0: {}
+        strijker-toren-dom0: {}
+        vanegten-toren-dom0: {}
+        wasse-dom0: {}
+        wiechers-dom0: {}
+        wildryck-dom0: {}
+        wkr-dom0: {}
+        zoer-dom0: {}

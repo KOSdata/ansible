@@ -15,7 +15,7 @@
     reboot_timeout: 1800
 
   tasks:
-    - import_tasks: tasks/debian-update-host.yml
+    - import_tasks: debian-update-host.yml
 
 ###########################################################################
 # Phase 2
@@ -33,7 +33,7 @@
     reboot_timeout: 1800
 
   tasks:
-    - import_tasks: tasks/debian-update-host.yml
+    - import_tasks: debian-update-host.yml
 
 ###########################################################################
 # Phase 3
@@ -51,4 +51,4 @@
     reboot_timeout: 1800
 
   tasks:
-    - import_tasks: tasks/debian-update-host.yml
+    - import_tasks: debian-update-host.yml

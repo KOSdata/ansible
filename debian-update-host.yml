@@ -26,7 +26,7 @@
 - name: Set default variables when not provided by wrapper playbook
   ansible.builtin.set_fact:
     apt_lock_timeout_effective: "{{ apt_lock_timeout | default(600) }}"
-    reboot_timeout_effective: "{{ reboot_timeout | default(1800) }}"
+    reboot_timeout_effective: "{{ reboot_timeout | default(600) }}"
 
 ###########################################################################
 # Static variables
@@ -368,7 +368,7 @@
     connect_timeout: 30
     pre_reboot_delay: 5
     post_reboot_delay: 20
-    test_command: "hostname -f"
+    test_command: "/bin/true"
   when: reboot_required | bool
 
 - name: Get hostname after reboot-required reboot
@@ -711,7 +711,7 @@
     connect_timeout: 30
     pre_reboot_delay: 5
     post_reboot_delay: 20
-    test_command: "hostname -f"
+    test_command: "/bin/true"
   when:
     - not reboot_required | bool
     - final_affected_pids | default([]) | length > 0

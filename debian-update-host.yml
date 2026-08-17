@@ -264,6 +264,24 @@
   changed_when: false
   failed_when: false
 
+- name: Get running kernel before update
+  ansible.builtin.command: uname -r
+  register: running_kernel_before
+  changed_when: false
+  failed_when: false
+ 
+- name: Get newest installed kernel before update
+  ansible.builtin.shell: |
+    dpkg-query -W -f='${Package}\n' 'linux-image-[0-9]*' 2>/dev/null \
+    | sed 's/^linux-image-//' \
+    | grep -E '^[0-9]+' \
+    | sort -V \
+    | tail -n 1
+register: newest_installed_kernel_before
+changed_when: false
+ failed_when: false
+
+
 ###########################################################################
 # APT preflight
 ###########################################################################
@@ -326,7 +344,6 @@
     autoclean: true
     lock_timeout: "{{ apt_lock_timeout_effective }}"
   register: apt_upgrade
-
 ###########################################################################
 # Reboot-required check
 ###########################################################################
@@ -341,9 +358,41 @@
     path: /run/reboot-required
   register: reboot_required_run
 
+- name: Get running kernel after update
+  ansible.builtin.command: uname -r
+  register: running_kernel_after
+  changed_when: false
+  failed_when: false
+
+- name: Get newest installed kernel after update
+  ansible.builtin.shell: |
+    dpkg-query -W -f='${Package}\n' 'linux-image-[0-9]*' 2>/dev/null \
+      | sed 's/^linux-image-//' \
+      | grep -E '^[0-9]+' \
+      | sort -V \
+      | tail -n 1
+  register: newest_installed_kernel_after
+  changed_when: false
+  failed_when: false
+
+- name: Determine whether reboot is required because a newer kernel is installed
+  ansible.builtin.set_fact:
+    kernel_reboot_required: >-
+      {{
+        newest_installed_kernel_after.stdout | default('') | length > 0
+        and
+        running_kernel_after.stdout | default('') != newest_installed_kernel_after.stdout | default('')
+      }}
+
 - name: Set reboot_required fact
   ansible.builtin.set_fact:
-    reboot_required: "{{ reboot_required_varrun.stat.exists or reboot_required_run.stat.exists }}"
+    reboot_required_by_file: "{{ reboot_required_varrun.stat.exists or reboot_required_run.stat.exists }}"
+    reboot_required: >-
+      {{
+        reboot_required_varrun.stat.exists
+        or reboot_required_run.stat.exists
+        or kernel_reboot_required | bool
+      }}
 
 - name: Read reboot-required package list if present
   ansible.builtin.shell: |
@@ -355,7 +404,23 @@
   register: reboot_required_pkgs
   changed_when: false
   failed_when: false
-  when: reboot_required | bool
+  when: reboot_required_by_file | bool
+
+- name: Show reboot decision details
+  ansible.builtin.debug:
+    msg:
+      host: "{{ inventory_hostname }}"
+      fqdn: "{{ fqdn_before.stdout | default('unknown') }}"
+      reboot_required: "{{ reboot_required }}"
+      reboot_required_by_file: "{{ reboot_required_by_file }}"
+      kernel_reboot_required: "{{ kernel_reboot_required }}"
+      running_kernel_before: "{{ running_kernel_before.stdout | default('unknown') }}"
+      newest_installed_kernel_before: "{{ newest_installed_kernel_before.stdout | default('unknown') }}"
+      running_kernel_after: "{{ running_kernel_after.stdout | default('unknown') }}"
+      newest_installed_kernel_after: "{{ newest_installed_kernel_after.stdout | default('unknown') }}"
+      reboot_required_files:
+        var_run_reboot_required: "{{ reboot_required_varrun.stat.exists }}"
+        run_reboot_required: "{{ reboot_required_run.stat.exists }}"
 
 ###########################################################################
 # Direct reboot if Debian explicitly requires it

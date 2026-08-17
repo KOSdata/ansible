@@ -425,15 +425,20 @@ changed_when: false
 ###########################################################################
 # Direct reboot if Debian explicitly requires it
 ###########################################################################
+- name: Show effective reboot timeout
+  ansible.builtin.debug:
+    msg: "Effective reboot timeout: {{ reboot_timeout_effective | int }} seconds"
+  when: reboot_required | bool
 
 - name: Reboot when reboot-required file is present
   ansible.builtin.reboot:
     msg: "Reboot initiated by AWX after Debian dist-upgrade because reboot-required file exists"
-    reboot_timeout: "{{ reboot_timeout_effective }}"
+    reboot_timeout: "{{ reboot_timeout_effective | int }}"
     connect_timeout: 30
     pre_reboot_delay: 5
     post_reboot_delay: 20
     test_command: "/bin/true"
+  timeout: 1200
   when: reboot_required | bool
 
 - name: Get hostname after reboot-required reboot
@@ -769,14 +774,22 @@ changed_when: false
     - not reboot_required | bool
     - final_affected_pids | default([]) | length > 0
 
+- name: Show effective reboot timeout
+  ansible.builtin.debug:
+    msg: "Effective reboot timeout: {{ reboot_timeout_effective | int }} seconds"
+  when:
+   - not reboot_required | bool
+   - final_affected_pids | default([]) | length > 0
+
 - name: Reboot when final lsof check still finds affected processes
   ansible.builtin.reboot:
     msg: "Reboot initiated by AWX because lsof still found processes using deleted files after service restart attempts"
-    reboot_timeout: "{{ reboot_timeout_effective }}"
+    reboot_timeout: "{{ reboot_timeout_effective | int }}"
     connect_timeout: 30
     pre_reboot_delay: 5
     post_reboot_delay: 20
     test_command: "/bin/true"
+  timeout: 1200
   when:
     - not reboot_required | bool
     - final_affected_pids | default([]) | length > 0

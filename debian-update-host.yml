@@ -269,7 +269,7 @@
   register: running_kernel_before
   changed_when: false
   failed_when: false
- 
+
 - name: Get newest installed kernel before update
   ansible.builtin.shell: |
     dpkg-query -W -f='${Package}\n' 'linux-image-[0-9]*' 2>/dev/null \
@@ -277,9 +277,9 @@
     | grep -E '^[0-9]+' \
     | sort -V \
     | tail -n 1
-register: newest_installed_kernel_before
-changed_when: false
- failed_when: false
+  register: newest_installed_kernel_before
+  changed_when: false
+  failed_when: false
 
 
 ###########################################################################

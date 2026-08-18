@@ -377,12 +377,16 @@
 
 - name: Determine whether reboot is required because a newer kernel is installed
   ansible.builtin.set_fact:
-    kernel_reboot_required: >-
-      {{
-        newest_installed_kernel_after.stdout | default('') | length > 0
-        and
-        running_kernel_after.stdout | default('') != newest_installed_kernel_after.stdout | default('')
-      }}
+  kernel_reboot_required: >-
+    {{
+      (newest_installed_kernel_after.stdout | default('') | trim | length > 0)
+      and
+      (
+        (running_kernel_after.stdout | default('') | trim)
+        !=
+        (newest_installed_kernel_after.stdout | default('') | trim)
+      )
+    }}
 
 - name: Set reboot_required fact
   ansible.builtin.set_fact:

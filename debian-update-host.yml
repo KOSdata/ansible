@@ -375,17 +375,30 @@
   changed_when: false
   failed_when: false
 
+- name: Normalize kernel versions
+  ansible.builtin.set_fact:
+    running_kernel_normalized: >-
+      {{
+        running_kernel_after.stdout
+        | default('')
+        | trim
+        | regex_replace('-unsigned$', '')
+      }}
+    installed_kernel_normalized: >-
+      {{
+        newest_installed_kernel_after.stdout
+        | default('')
+        | trim
+        | regex_replace('-unsigned$', '')
+      }}
+
 - name: Determine whether reboot is required because a newer kernel is installed
   ansible.builtin.set_fact:
     kernel_reboot_required: >-
       {{
-        (newest_installed_kernel_after.stdout | default('') | trim | length > 0)
+        installed_kernel_normalized | length > 0
         and
-        (
-          (running_kernel_after.stdout | default('') | trim)
-          !=
-          (newest_installed_kernel_after.stdout | default('') | trim)
-        )
+        running_kernel_normalized != installed_kernel_normalized
       }}
 
 - name: Set reboot_required fact
